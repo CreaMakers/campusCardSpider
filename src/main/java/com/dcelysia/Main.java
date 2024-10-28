@@ -1,8 +1,5 @@
 package com.dcelysia;
 
-import InfoClass.electricityCharge;
-import Methods.getElectricityCharge;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -13,9 +10,7 @@ public class Main {
         String buildId = "西苑9栋";
         //必须是正确的宿舍号
         String Nod = "521";
-        // 电费信息
-        electricityCharge chargeInfo = method.getCharge(address, buildId, Nod);
         // 打印电费信息
-        System.out.println(chargeInfo.getMsg());
+        System.out.println(method.getCharge(address, buildId, Nod));
     }
 }

@@ -1,11 +1,9 @@
-package Methods;
+package com.dcelysia;
 
-import InfoClass.electricityCharge;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -86,7 +84,13 @@ public class getElectricityCharge {
         buildingMap.put("至诚轩4栋A区", "43");
     }
     String url = "http://yktwd.csust.edu.cn:8988/web/Common/Tsm.html";
-    public electricityCharge getCharge(String address, String buildId, String Nod) {
+    public String getCharge(String address, String buildId, String Nod) {
+
+        /*
+        *
+        * 开始爬取
+        *
+        * */
         OkHttpClient client = new OkHttpClient();
         // 表单数据
         String jsondata = String.format("{\"query_elec_roominfo\": { \"aid\":\"%s\", \"account\": \"293924\",\"room\": { \"roomid\": \"%s\", \"room\":\" \" }, \"floor\": { \"floorid\": \"\", \"floor\": \"\" }, \"area\": { \"area\": \"%s\", \"areaname\": \"\" }, \"building\": { \"buildingid\": \"%s\", \"building\": \"\" } }}",
@@ -110,7 +114,24 @@ public class getElectricityCharge {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        /*
+         *
+         * 结束爬取
+         *
+         * */
+
+
+        /*
+        * 开梯子的特判
+        * */
         String msg = null;
+        if(responseBody == null || "".equals(responseBody)) {
+            return "网络异常，无法获取电量";
+        }
+        /*
+        * 爬虫json格式转换
+        * */
         if("系统异常!".equals(responseBody)) {
             msg = responseBody;
         }
@@ -120,6 +141,6 @@ public class getElectricityCharge {
             JsonObject queryElecRoomInfo = jsonObject.getAsJsonObject("query_elec_roominfo");
             msg = queryElecRoomInfo.get("errmsg").getAsString();
         }
-        return new electricityCharge(msg);
+        return msg;
     }
 }
